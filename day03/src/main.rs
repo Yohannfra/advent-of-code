@@ -41,7 +41,7 @@ fn part1() {
             epsilon_rate |= 1 << line_len-i
         }
     }
-    println!("gamma_rate: {} x epsilon_rate: {} = {}", gamma_rate, epsilon_rate, gamma_rate * epsilon_rate);
+    println!("gamma_rate: {} x epsilon_rate: {} = power consumption: {}", gamma_rate, epsilon_rate, gamma_rate * epsilon_rate);
 }
 
 fn part2() {
