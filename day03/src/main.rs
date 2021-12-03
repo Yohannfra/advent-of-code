@@ -74,61 +74,6 @@ fn get_bits_frequency(lines: &Vec<&str>) -> Vec<i32> {
 }
 
 #[allow(dead_code)]
-fn get_oxygen_generator_rating(lines: Vec<&str>, index: usize) -> &str {
-    if lines.len() == 1 {
-        return lines[0];
-    }
-
-    let bits_frequencies: Vec<i32> = get_bits_frequency(&lines);
-
-    let mut lines_tmp: Vec<&str> = Vec::new();
-
-    for l in &lines {
-        if l.is_empty() {
-            continue;
-        }
-        let c: char = l.as_bytes()[index] as char;
-
-        if bits_frequencies[index] > 0 && c == '1' {
-            lines_tmp.push(l);
-        } else if bits_frequencies[index] < 0 && c == '0' {
-            lines_tmp.push(l);
-        } else if bits_frequencies[index] == 0 && c == '1' {
-            lines_tmp.push(l);
-        }
-    }
-
-    return get_oxygen_generator_rating(lines_tmp, index + 1);
-}
-
-#[allow(dead_code)]
-fn get_co2_scrubber_rating(lines: Vec<&str>, index: usize) -> &str {
-    if lines.len() == 1 {
-        return lines[0];
-    }
-
-    let bits_frequencies: Vec<i32> = get_bits_frequency(&lines);
-
-    let mut lines_tmp: Vec<&str> = Vec::new();
-
-    for l in &lines {
-        if l.is_empty() {
-            continue;
-        }
-        let c: char = l.as_bytes()[index] as char;
-
-        if bits_frequencies[index] > 0 && c == '0' {
-            lines_tmp.push(l);
-        } else if bits_frequencies[index] < 0 && c == '1' {
-            lines_tmp.push(l);
-        } else if bits_frequencies[index] == 0 && c == '0' {
-            lines_tmp.push(l);
-        }
-    }
-
-    return get_co2_scrubber_rating(lines_tmp, index + 1);
-}
-
 fn get_co2_or_oxygen_rating(lines: Vec<&str>, comparators: &str, index: usize) -> isize {
     if lines.len() == 1 {
         return isize::from_str_radix(lines[0], 2).unwrap()
