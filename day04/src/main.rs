@@ -116,9 +116,43 @@ fn part1() {
 }
 
 fn part2() {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() != 2 {
+        println!("USAGE: ./day04 input.txt");
+        std::process::exit(1);
+    }
+
+    let fp = args[1].clone();
+    let fc = fs::read_to_string(fp).expect("Could not read file");
+    let lines: Vec<&str> = fc.split("\n").collect();
+
+    let random_numbers: Vec<&str> = lines[0].split(",").collect();
+
+    let mut all_grids = parse_grids(lines);
+
+    let mut win_number: i32 = 0;
+    let mut last_win_grid: Vec<Vec<i32>> = Vec::new();
+
+    for n in random_numbers {
+        let number = n.parse::<i32>().unwrap();
+        mark_grid(&mut all_grids, number);
+
+        loop {
+            let winner: i32 = check_grids_win(&all_grids);
+            if winner != -1 {
+                win_number = number;
+                last_win_grid = all_grids[winner as usize].clone();
+                all_grids.remove(winner as usize);
+            } else {
+                break;
+            }
+        }
+    }
+    println!("Last winner score is : {}", sum_unmarkeds_numbers(&last_win_grid) * win_number);
 }
 
 fn main() {
-    part1();
-    // part2();
+    // part1();
+    part2();
 }
