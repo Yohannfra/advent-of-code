@@ -38,52 +38,28 @@ fn part2() {
         std::process::exit(1);
     }
 
-    let fp = args[1].clone();
-
-    let fc = fs::read_to_string(fp).expect("Could not read the file");
+    let fc = fs::read_to_string(&args[1]).expect("Could not read the file");
     let lines: Vec<&str> = fc.split("\n").collect();
 
-    let mut last1 = -1;
-    let mut last2 = -1;
-    let mut last_sum = 0;
-    let mut nb_increments = 0;
+    let mut nb_of_increase: i32 = -1;
 
-    for l in lines {
-        let num = match l.parse::<i32>() {
-            Ok(n) => n,
-            Err(_e) => continue,
-        };
+    let mut previous_2 = lines[0].parse::<i32>().unwrap();
+    let mut previous_1 = lines[1].parse::<i32>().unwrap();
+    let mut previous_sum = 0;
 
-        let sum = last1 + last2 + num;
-        if last_sum > 0 && last1 != -1 && last2 != -1 && sum > last_sum {
-            let c: char = if sum > last_sum {
-                '+'
-            } else {
-                '-'
-            };
-            println!(
-                "{} + {} + {} = {} > {}   {}",
-                last2,
-                last1,
-                num,
-                sum,
-                last_sum,
-                c
-            );
-            // println!("{} {} {}", last2, last1, num);
-            nb_increments+= 1;
-            // print!(" : Increased {} > {}", last1 + last2 + num, last_sum);
+    for i in 2..lines.len() - 1{
+        let current: i32 = lines[i].parse::<i32>().unwrap();
+
+        let sum = current + previous_1 + previous_2;
+        if sum > previous_sum {
+            nb_of_increase += 1;
         }
-
-        if last1 != -1 {
-            last2 = last1;
-            last1 = num;
-            last_sum = last1 + last2 + num;
-        } else {
-            last1 = num;
-        }
+        previous_sum = sum;
+        previous_2 = previous_1;
+        previous_1 = current;
     }
-    println!("{}", nb_increments);
+    println!("{}", nb_of_increase);
+
 }
 
 fn main() {
