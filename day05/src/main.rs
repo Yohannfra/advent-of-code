@@ -67,15 +67,9 @@ fn print_sum_of_overlap(all_lines: Vec<Line>) {
     println!("{}", sum_of_points);
 }
 
-fn part1() {
-    let args: Vec<String> = env::args().collect();
-
-    if args.len() != 2 {
-        println!("USAGE: day05 input.txt");
-        std::process::exit(1);
-    }
-
-    let mut all_lines: Vec<Line> = parse_lines(&args[1]);
+#[allow(dead_code)]
+fn part1(fp: &str) {
+    let mut all_lines: Vec<Line> = parse_lines(fp);
 
     for l in &mut all_lines {
         if l.p1.x != l.p2.x && l.p1.y != l.p2.y {
@@ -96,6 +90,36 @@ fn part1() {
 
 }
 
+#[allow(dead_code)]
+fn part2(fp: &str) {
+    let mut all_lines: Vec<Line> = parse_lines(fp);
+
+    for l in &mut all_lines {
+        if l.p1.x != l.p2.x && l.p1.y != l.p2.y {
+            continue
+        }
+        if l.p1.x == l.p2.x {
+            for i in if l.p1.y < l.p2.y{ l.p1.y..=l.p2.y } else { l.p2.y..=l.p1.y } {
+                (*l).path.push(Point {x: l.p1.x, y: i});
+            }
+        } else {
+            for i in if l.p1.x < l.p2.x { l.p1.x..=l.p2.x} else { l.p2.x..=l.p1.x } {
+                (*l).path.push(Point {x: i, y: l.p1.y});
+            }
+        }
+    }
+
+    print_sum_of_overlap(all_lines);
+}
+
 fn main() {
-    part1();
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() != 2 {
+        println!("USAGE: day05 input.txt");
+        std::process::exit(1);
+    }
+
+    // part1(&args[1]);
+    part2(&args[1]);
 }
