@@ -45,11 +45,11 @@ fn parse_lines(fp: &str) -> Vec<Line> {
 }
 
 fn print_sum_of_overlap(all_lines: Vec<Line>) {
-    let mut map: HashMap<Point, i32>  = HashMap::new();
+    let mut map: HashMap<Point, i32> = HashMap::new();
 
     for l in all_lines {
         for p in l.path {
-            if ! map.contains_key(&p) {
+            if !map.contains_key(&p) {
                 map.insert(p, 1);
             } else {
                 *map.get_mut(&p).unwrap() += 1;
@@ -73,21 +73,50 @@ fn part1(fp: &str) {
 
     for l in &mut all_lines {
         if l.p1.x != l.p2.x && l.p1.y != l.p2.y {
-            continue
+            continue;
         }
         if l.p1.x == l.p2.x {
-            for i in if l.p1.y < l.p2.y{ l.p1.y..=l.p2.y } else { l.p2.y..=l.p1.y } {
-                (*l).path.push(Point {x: l.p1.x, y: i});
+            for i in if l.p1.y < l.p2.y { l.p1.y..=l.p2.y } else { l.p2.y..=l.p1.y } {
+                (*l).path.push(Point { x: l.p1.x, y: i });
             }
         } else {
-            for i in if l.p1.x < l.p2.x { l.p1.x..=l.p2.x} else { l.p2.x..=l.p1.x } {
-                (*l).path.push(Point {x: i, y: l.p1.y});
+            for i in if l.p1.x < l.p2.x { l.p1.x..=l.p2.x } else { l.p2.x..=l.p1.x } {
+                (*l).path.push(Point { x: i, y: l.p1.y });
             }
         }
     }
 
     print_sum_of_overlap(all_lines);
+}
 
+fn is_a_45_degrees_diagonal(l: &Line) -> bool {
+    (l.p1.x - l.p2.x).abs() == (l.p1.y - l.p2.y).abs()
+}
+
+fn get_diagonal_path(l: &Line) -> Vec<Point> {
+    let mut path: Vec<Point> = Vec::new();
+
+    let mut p1: Point = Point {
+        x: l.p1.x,
+        y: l.p1.y,
+    };
+    let p2: Point = Point {
+        x: l.p2.x,
+        y: l.p2.y,
+    };
+
+    path.push(Point { x: p1.x, y: p1.y });
+
+    loop {
+        p1.x += if p1.x < p2.x { 1 } else { -1 };
+        p1.y += if p1.y < p2.y { 1 } else { -1 };
+
+        path.push(Point { x: p1.x, y: p1.y });
+        if p1 == p2 {
+            break;
+        }
+    }
+    path
 }
 
 #[allow(dead_code)]
@@ -96,19 +125,21 @@ fn part2(fp: &str) {
 
     for l in &mut all_lines {
         if l.p1.x != l.p2.x && l.p1.y != l.p2.y {
-            continue
+            if is_a_45_degrees_diagonal(&l) {
+                (*l).path.append(&mut get_diagonal_path(&l));
+            }
+            continue;
         }
         if l.p1.x == l.p2.x {
-            for i in if l.p1.y < l.p2.y{ l.p1.y..=l.p2.y } else { l.p2.y..=l.p1.y } {
-                (*l).path.push(Point {x: l.p1.x, y: i});
+            for i in if l.p1.y < l.p2.y { l.p1.y..=l.p2.y } else { l.p2.y..=l.p1.y } {
+                (*l).path.push(Point { x: l.p1.x, y: i });
             }
         } else {
-            for i in if l.p1.x < l.p2.x { l.p1.x..=l.p2.x} else { l.p2.x..=l.p1.x } {
-                (*l).path.push(Point {x: i, y: l.p1.y});
+            for i in if l.p1.x < l.p2.x { l.p1.x..=l.p2.x } else { l.p2.x..=l.p1.x } {
+                (*l).path.push(Point { x: i, y: l.p1.y });
             }
         }
     }
-
     print_sum_of_overlap(all_lines);
 }
 
