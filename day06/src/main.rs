@@ -71,7 +71,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() != 2 {
-        println!("USAGE: day05 input.txt");
+        println!("USAGE: day06 input.txt");
         std::process::exit(1);
     }
     // part1(&args[1]);
