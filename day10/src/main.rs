@@ -144,7 +144,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() != 2 {
-        println!("USAGE: day08 input.txt");
+        println!("USAGE: day10 input.txt");
         std::process::exit(1);
     }
 
