@@ -4,6 +4,7 @@ import sys
 
 from days import day1
 from days import day2
+from days import day3
 
 
 def main():
@@ -15,7 +16,10 @@ def main():
     # day1.part2(sys.argv[1])
 
     # day2.part1(sys.argv[1])
-    day2.part2(sys.argv[1])
+    # day2.part2(sys.argv[1])
+
+    # day3.part1(sys.argv[1])
+    day3.part2(sys.argv[1])
 
 if __name__ == '__main__':
     main()
